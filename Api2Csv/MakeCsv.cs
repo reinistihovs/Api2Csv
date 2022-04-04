@@ -5,8 +5,6 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Api2Csv
@@ -15,7 +13,7 @@ namespace Api2Csv
     {
         public static void generate(string jsonContent)
         {
-            
+
 
             //used NewtonSoft NuGet, its free for commercial use: https://www.newtonsoft.com/json
             try
@@ -40,8 +38,32 @@ namespace Api2Csv
                 var valueLines = dataTable.AsEnumerable()
                                    .Select(row => string.Join(",", row.ItemArray));
                 lines.AddRange(valueLines);
-                File.AppendAllLines(csvPath, lines);
-            } catch (Exception e)
+                try
+                {
+                    File.AppendAllLines(csvPath, lines);
+                }
+                catch (DirectoryNotFoundException e)
+                {
+                    Logger.Append($"Failed to append csv file, error: {e}");
+                    throw new Exception($"Directory {csvPath} not found", e);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Logger.Append($"Failed to append csv file, error: {e}");
+                    throw new Exception($"Could not access the directory {csvPath}, permission denied", e);
+                }
+                catch (IOException e)
+                {
+                    Logger.Append($"Failed to append csv file, error: {e}");
+                    throw new Exception("Error during csv file write", e);
+                }
+                catch (Exception e)
+                {
+                    Logger.Append($"Failed to append csv file, error: {e}");
+                    throw new Exception("Error occurred, cant create csv file", e);
+                }
+            }
+            catch (Exception e)
             {
                 Logger.Append($"Failed to append csv file, error: {e}");
             }

@@ -32,12 +32,12 @@ namespace Api2Csv
                 {
                     return streamReader.ReadToEnd();
                 }
-            } 
+            }
             catch (Exception e)
             {
                 Logger.Append($"Failed to retrieve information from api, error: {e}");
                 return null;
-            }     
+            }
 
         }
     }

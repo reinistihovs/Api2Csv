@@ -17,21 +17,25 @@ namespace Api2Csv
                 {
                     writer.WriteLine($"{DateTime.Now} : {logMessage}");
                 }
-                catch (DirectoryNotFoundException ex)
+                catch (DirectoryNotFoundException e)
                 {
-                    throw new Exception($"Directory {logPath} not found", ex);
+                    Logger.Append($"Failed to write log file, error: {e}");
+                    throw new Exception($"Directory {logPath} not found", e);
                 }
-                catch (UnauthorizedAccessException ex)
+                catch (UnauthorizedAccessException e)
                 {
-                    throw new Exception($"Could not access the directory {logPath}, permission denied", ex);
+                    Logger.Append($"Failed to write log file, error: {e}");
+                    throw new Exception($"Could not access the directory {logPath}, permission denied", e);
                 }
-                catch (IOException ex)
+                catch (IOException e)
                 {
-                    throw new Exception("Error during file write", ex);
+                    Logger.Append($"Failed to write log file, error: {e}");
+                    throw new Exception("Error during file write", e);
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    throw new Exception("Error Occurred", ex);
+                    Logger.Append($"Failed to write log file, error: {e}");
+                    throw new Exception("Error Occurred", e);
                 }
             }
 

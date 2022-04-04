@@ -1,20 +1,22 @@
-﻿using System;
-using System.Configuration;
-using System.Collections.Specialized;
-using System.IO;
-
-
-namespace Api2Csv
+﻿namespace Api2Csv
 {
     class Program
     {
         static void Main(string[] args)
         {
-            foreach (string arg in args[0].Split(','))
+            if (args == null || args.Length == 0)
             {
-                Logger.Append(arg);
-                string jsonString = FetchData.ApiConnect(arg);
-                MakeCsv.generate(jsonString);
+                Logger.Append($"App launched without arguments, nothing to do!");
+            }
+            else
+            {
+                foreach (string arg in args[0].Split(','))
+
+                {
+                    Logger.Append($"Fetching data for object: {arg}");
+                    string jsonString = FetchData.ApiConnect(arg);
+                    MakeCsv.generate(jsonString);
+                }
             }
         }
     }
