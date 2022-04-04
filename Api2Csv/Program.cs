@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.IO;
 
 
-namespace ApiToCsv
+namespace Api2Csv
 {
     class Program
     {
@@ -12,21 +12,10 @@ namespace ApiToCsv
         {
             foreach (string arg in args[0].Split(','))
             {
-                Console.WriteLine(arg);
                 Logger.Append(arg);
+                string jsonString = FetchData.ApiConnect(arg);
+                MakeCsv.generate(jsonString);
             }
-
-            string sAttr;
-            sAttr = ConfigurationManager.AppSettings.Get("LogPath");
-            Console.WriteLine("The value of Key0 is " + sAttr);
-
-            // Read all the keys from the config file
-            NameValueCollection sAll;
-            sAll = ConfigurationManager.AppSettings;
-
-            foreach (string s in sAll.AllKeys)
-                Console.WriteLine("Key: " + s + " Value: " + sAll.Get(s));
-            Console.ReadLine();
         }
     }
 }

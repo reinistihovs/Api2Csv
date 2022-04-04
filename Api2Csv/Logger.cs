@@ -3,16 +3,37 @@ using System.Configuration;
 using System.IO;
 
 
-namespace ApiToCsv
+namespace Api2Csv
 {
-    class Logger
+    public static class Logger
     {
-        //public StreamWriter w = File.AppendText(ConfigurationManager.AppSettings.Get("LogPath"));
         public static void Append(string logMessage)
         {
+            string logPath = ConfigurationManager.AppSettings["logPath"];
 
-            //File.AppendText(ConfigurationManager.AppSettings.Get("LogPath")).WriteLine($"{DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()} :{logMessage}");
-            //ile.AppendText(ConfigurationManager.AppSettings.Get("LogPath")).WriteLine($"{DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()} :{logMessage}");
+            using (StreamWriter writer = new StreamWriter(logPath, true))
+            {
+                try
+                {
+                    writer.WriteLine($"{DateTime.Now} : {logMessage}");
+                }
+                catch (DirectoryNotFoundException ex)
+                {
+                    throw new Exception($"Directory {logPath} not found", ex);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    throw new Exception($"Could not access the directory {logPath}, permission denied", ex);
+                }
+                catch (IOException ex)
+                {
+                    throw new Exception("Error during file write", ex);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error Occurred", ex);
+                }
+            }
 
         }
 
