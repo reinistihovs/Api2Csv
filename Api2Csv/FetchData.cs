@@ -15,8 +15,6 @@ namespace Api2Csv
                 string apiAuthHeader = ConfigurationManager.AppSettings["apiAuthHeader"];
                 string apiBase = ConfigurationManager.AppSettings["apiBase"];
                 string apiUrl = apiBase + requestId;
-                Console.WriteLine(apiBase);
-                Console.WriteLine(apiUrl);
                 var httpRequest = (HttpWebRequest)WebRequest.Create(apiUrl);
                 httpRequest.Accept = "application/json";
                 if (apiAuthHeader == String.Empty)
