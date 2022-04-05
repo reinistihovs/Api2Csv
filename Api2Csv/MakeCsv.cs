@@ -57,9 +57,14 @@ namespace Api2Csv
                 Logger.Append($"Error during csv file write, error: {e}");
                 throw new Exception("Error during csv file write", e);
             }
+            catch (JsonReaderException e)
+            {
+                Logger.Append($"Could not parse request, error: {e}");
+            }
             catch (Exception e)
             {
-                Logger.Append($"Error occurred, cant create csv file, error: {e}");
+                Logger.Append($"Could not write csv, error: {e}");
+                throw new Exception("Error during csv file write", e);
             }
         }
     }
