@@ -26,21 +26,23 @@ namespace Api2Csv
                 DataSet dataSet = new DataSet();
                 dataSet.ReadXml(xmlReader);
                 var dataTable = dataSet.Tables[0];
-                var lines = new List<string>();
+                var rows = new List<string>();
                 string[] columnNames = dataTable.Columns.Cast<DataColumn>().
                                                   Select(column => column.ColumnName).
                                                   ToArray();
                 var header = string.Join(",", columnNames);
+
+                // Skip adding header, if file already exists.
                 if (!File.Exists(csvPath))
                 {
-                    lines.Add(header);
+                    rows.Add(header);
                 }
-                var valueLines = dataTable.AsEnumerable()
+                var valueRows = dataTable.AsEnumerable()
                                    .Select(row => string.Join(",", row.ItemArray));
-                lines.AddRange(valueLines);
+                rows.AddRange(valueRows);
                 try
                 {
-                    File.AppendAllLines(csvPath, lines);
+                    File.AppendAllLines(csvPath, rows);
                 }
                 catch (DirectoryNotFoundException e)
                 {
